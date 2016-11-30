@@ -1,0 +1,25 @@
+module whilelang
+
+imports
+  
+  completion/completion
+  pp
+  outline
+  analysis
+  label
+
+rules // Debugging
+  
+  debug-show-aterm:
+    (node, _, _, path, project-path) -> (filename, result)
+    with
+      filename := <guarantee-extension(|"aterm")> path
+    ; result   := node
+  
+  debug-label-aterm:
+    (node, _, _, path, project-path) -> (filename, result)
+    with
+      filename := <guarantee-extension(|"aterm")> path
+    ; result   := <to-labeled> node
+
+  debug-show-labeled = (to-labeled, id, id, id, id); editor-format

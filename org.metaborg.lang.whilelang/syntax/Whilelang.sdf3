@@ -1,0 +1,18 @@
+module Whilelang
+
+imports
+
+  Statement
+
+context-free start-symbols
+  
+  Start
+
+context-free syntax
+  
+  Start.While = Statement
+  Start.While = [[Statement];]
+  Start.Labeled = [#labeled
+[LabeledStatement]]
+  Start.Labeled = [#labeled
+[LabeledStatement];]

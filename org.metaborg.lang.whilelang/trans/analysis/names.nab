@@ -1,0 +1,27 @@
+module names
+
+imports
+
+signatures/-
+
+
+namespaces
+
+Variable
+
+binding rules
+
+While(_): scopes Variable
+Labeled(_): scopes Variable
+
+Assign(v, e):
+defines non-unique Variable v
+  of type t
+where e has type t
+
+LabeledAssign(v, e, _):
+defines non-unique Variable v
+  of type t
+where e has type t
+
+Ref(v): refers to Variable v

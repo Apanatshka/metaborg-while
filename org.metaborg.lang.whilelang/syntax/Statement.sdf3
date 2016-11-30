@@ -1,0 +1,56 @@
+module Statement
+
+imports
+  
+  Common
+  Expr
+
+context-free syntax
+  
+  Statement.Assign = [[ID] := [Expr]]
+  Statement.Skip = [skip]
+  
+  Statement.Seq = [[Statement];
+[Statement]] {right}
+
+  Statement.IfThenElse = [if [Expr]
+  then [Statement]
+  else [Statement]]
+  
+  Statement.While = [while [Expr]
+do [Statement]]
+
+  Statement = [(
+[Statement]
+)] {bracket}
+
+  LabeledStatement.LabeledAssign = <[<ID> := <Expr>]<INT>>
+  LabeledStatement.LabeledSkip = <[skip]<INT>>
+  
+  LabeledStatement.Seq = [[LabeledStatement];
+[LabeledStatement]] {right}
+
+  LabeledStatement.LabeledIfThenElse = <if [<Expr>]<INT>
+  then <LabeledStatement>
+  else <LabeledStatement>>
+  
+  LabeledStatement.LabeledWhile = <while [<Expr>]<INT>
+do <LabeledStatement>>
+
+  LabeledStatement = [(
+[LabeledStatement]
+)] {bracket}
+
+context-free priorities
+  
+  Statement.While >
+  Statement.Seq,
+  
+  Statement.IfThenElse <2> >
+  Statement.Seq,
+  
+  LabeledStatement.LabeledWhile >
+  LabeledStatement.Seq,
+  
+  LabeledStatement.LabeledIfThenElse <2> >
+  LabeledStatement.Seq

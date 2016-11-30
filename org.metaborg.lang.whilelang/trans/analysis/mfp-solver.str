@@ -1,0 +1,67 @@
+module analysis/mfp-solver
+
+imports
+  analysis/utils
+//  analysis/predicates
+//  analysis/mappings
+
+strategies
+  // This code should pretty closely follow the Algorithm in table 2.8 of "Principles of Program Analysis" by Nielson, Nielson and Hankin
+  // Note that the worklist is adapted to only hold the "from" part of a flow edge. That's easier when using a hashtable of "from" to lists of "to" for flow
+  
+  mfp-solve(transfer,squareLtEq,lub|aug-flow,extremalLabels,extremalValue,bottom): _ -> result 
+    with (flow,r2c) := aug-flow
+       ; worklist := <hashtable-keys> flow
+       ; analysis := <new-hashtable>
+         // get all the labels from flow and set them to bottom in Analysis
+       ; <concat;nub;map(\l -> <hashtable-put(|l,bottom)> analysis\)> [worklist,<hashtable-values;concat> flow]
+         // change the extremal labels to the extremal value
+       ; <map(\l -> <hashtable-put(|l,extremalValue)> analysis\)> extremalLabels
+         // set up some easy getter strategies
+       ; let getA = \l -> <hashtable-get(|l)> analysis\
+                 <+ \l -> <hashtable-getlist;with(fail|$[Analysis, unknown label: [l]])> analysis\
+             getF = \l -> <hashtable-get(|l)> flow\ <+ ![]
+             r2c  = \l -> <hashtable-get(|l)> r2c\
+           // start Step 2 of the algorithm
+         in if <not(?[])> worklist
+              then <mfp-solve2( transfer
+                              , squareLtEq
+                              , lub
+                              , getA
+                              , getF
+                              , r2c
+                              )> (worklist, analysis)
+            end
+            // Step 3 of the algorithm
+          ; result := (analysis, <hashtable-map(mfp-solve3(transfer,r2c,getA))> analysis)
+         end
+                
+  mfp-solve3(transfer,r2c,getA): (l,set) -> (l, <transfer> (l,set)) where <not(r2c)> l
+  mfp-solve3(transfer,r2c,getA): (r,set) -> (r, <transfer> ((r,c),(set,cset)))
+    where c    := <r2c> r
+        ; cset := <getA> c
+  
+  // Step 2 of the algorithm
+  mfp-solve2(transfer,squareLtEq,lub,getA,getF,r2c): (worklist, analysis) -> ()
+    with worklist' := <Tl> worklist
+       ; label := <Hd> worklist
+         // for every edge from `label`, to the if-statement of Step 2 of the algorithm
+       ; !label;getF;!(<id>,worklist');foldl(mfp-solve2-2(transfer,squareLtEq,lub,getA,r2c|label,analysis))
+         => worklist''
+         // use the updated worklist for another round, this is the while-statement of the algorithm
+       ; if !worklist'';not(?[])
+           then <mfp-solve2(transfer,squareLtEq,lub,getA,getF,r2c)> (worklist'', analysis)
+         end
+  mfp-solve2-2(transfer,squareLtEq,lub,getA,r2c|label,analysis): (label', work) -> work'
+                // Extra check for the embellished monotone framework to use the transfer function with 2 arguments
+           with if c := <r2c> label; r := label
+                  then new-analysis-l := <Dupl;(id,(getA,getA));transfer> (r,c)
+                  else new-analysis-l := <Dupl;(id,getA);transfer> label
+                end
+              ; analysis-l' := <getA> label'
+                // The if-statement as seen in the algorithm
+              ; if <not(squareLtEq)> (new-analysis-l, analysis-l')
+                  then <hashtable-put(|label',<lub>(analysis-l',new-analysis-l))> analysis
+                     ; work' := [label' | work] // this line does the same as the for-all-statement in the algorithm
+                  else work' := work
+                end

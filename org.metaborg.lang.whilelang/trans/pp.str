@@ -1,0 +1,49 @@
+module pp
+
+imports
+
+  libstratego-gpp
+  libspoofax/sdf/pp
+  libspoofax/editor/refactoring/-
+  pp/Whilelang-parenthesize
+  pp/Whilelang-pp
+
+rules
+
+  editor-format:
+    (node, _, ast, path, project-path) -> (filename, result)
+    with
+      ext      := <get-extension> path
+    ; filename := <guarantee-extension(|$[pp.[ext]])> path
+    ; result   := <pp-debug> node
+
+rules
+  
+  pp-Whilelang-string =
+    parenthesize-Whilelang
+    ; prettyprint-Whilelang-start-symbols
+    ; !V([], <id>)
+    ; box2text-string(|120)
+      
+  pp-partial-Whilelang-string =
+    parenthesize-Whilelang
+    ; prettyprint-Whilelang
+    ; !V([], <id>)
+    ; box2text-string(|120)
+    
+  pp-partial-Whilelang-string(|sort) =
+    parenthesize-Whilelang
+    ; prettyprint-Whilelang(|sort)
+    ; !V([], <id>)
+    ; box2text-string(|120)  
+      
+  pp-debug :
+    ast -> result
+    with
+       result := <pp-Whilelang-string> ast
+    <+ <bottomup(try(not(is-string); not(is-list); not(pp-Whilelang-string); debug(!"cannot pp ")))> ast
+    ;  result := ""
+
+rules
+  
+  construct-textual-change = construct-textual-change(pp-partial-Whilelang-string, parenthesize, override-reconstruction, resugar)
