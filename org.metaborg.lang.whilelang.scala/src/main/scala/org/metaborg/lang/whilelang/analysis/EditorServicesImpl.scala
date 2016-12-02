@@ -16,7 +16,6 @@ import org.strategoxt.lang.Context
 object EditorServicesImpl extends EditorServices {
   override def editorAnalyze(generalStrategyInput: GeneralStrategyInput)
                             (implicit context: Context): AnalysisResult = {
-    context.getIOAgent.printError("TEST3")
     val startOfFile = generalStrategyInput.ast.origin.get.zero
 
     type Label = Int
