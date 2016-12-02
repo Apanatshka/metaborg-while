@@ -1,6 +1,6 @@
 package org.metaborg.lang.whilelang.ast
 
-import org.metaborg.lang.whilelang.ast.MCommon.SID
+import org.metaborg.lang.whilelang.ast.MCommon.SINT
 import org.metaborg.lang.whilelang.ast.MExpr.SExpr
 import org.metaborg.lang.whilelang.ast.MExpr.SExpr._
 import org.metaborg.lang.whilelang.ast.MStatement.SLabeledStatement.{LabeledAssign3, LabeledIfThenElse4, LabeledSkip1, LabeledWhile3}
@@ -8,11 +8,11 @@ import org.metaborg.lang.whilelang.ast.MStatement.SStatement._
 import org.metaborg.lang.whilelang.ast.MStatement.{SLabeledStatement, SStatement}
 import org.metaborg.lang.whilelang.ast.MWhilelang.SStart
 import org.metaborg.lang.whilelang.ast.MWhilelang.SStart.{Labeled1, While1}
-import org.metaborg.popa.mfp.{IntraControlFlow, SingleICF}
+import org.metaborg.popa.mfp.IntraControlFlow
 import org.metaborg.scalaterms.Origin
 
 /**
-  * Created by jeff on 28/11/16.
+  * Traversals over de AST to collect interesting things
   */
 object Utils {
 
@@ -97,8 +97,8 @@ object Utils {
   def flow(labeled1: Labeled1): IntraControlFlow[Int] = flow(labeled1.labeledstatement1)
 
   def flow(labeledStatement: SLabeledStatement): IntraControlFlow[Int] = labeledStatement match {
-    case LabeledAssign3(id1, expr2, int3, origin) => new SingleICF[Int](int3)
-    case LabeledSkip1(int1, origin) => new SingleICF[Int](int1)
+    case LabeledAssign3(id1, expr2, int3, origin) => IntraControlFlow.single(int3)
+    case LabeledSkip1(int1, origin) => IntraControlFlow.single(int1)
     case SLabeledStatement.Seq2(labeledstatement1, labeledstatement2, origin) =>
       flow(labeledstatement1).andThen(flow(labeledstatement2))
     case LabeledIfThenElse4(expr1, int2, labeledstatement3, labeledstatement4, origin) =>
@@ -113,19 +113,19 @@ object Utils {
   }
 
   def label(sStatement: SStatement)(implicit counter: Int = 1): (SLabeledStatement, Int) = sStatement match {
-    case Assign2(id1, expr2, origin) => (LabeledAssign3(id1, expr2, counter, origin), counter + 1)
-    case Skip0(origin) => (LabeledSkip1(counter, origin), counter + 1)
-    case Seq2(statement1, statement2, origin) =>
+    case Assign2(id1, expr2, o) => (LabeledAssign3(id1, expr2, SINT(counter.toString, o), o), counter + 1)
+    case Skip0(o) => (LabeledSkip1(SINT(counter.toString, o), o), counter + 1)
+    case Seq2(statement1, statement2, o) =>
       val (labeledStatement1, counter2) = label(statement1)
       val (labeledStatement2, counter3) = label(statement2)(counter2)
-      (SLabeledStatement.Seq2(labeledStatement1, labeledStatement2, origin), counter3)
-    case IfThenElse3(expr1, statement2, statement3, origin) =>
+      (SLabeledStatement.Seq2(labeledStatement1, labeledStatement2, o), counter3)
+    case IfThenElse3(expr1, statement2, statement3, o) =>
       val (labeledStatement2, counter2) = label(statement2)(counter + 1)
       val (labeledStatement3, counter3) = label(statement3)(counter2)
-      (LabeledIfThenElse4(expr1, counter, labeledStatement2, labeledStatement3, origin), counter3)
-    case While2(expr1, statement2, origin) =>
+      (LabeledIfThenElse4(expr1, SINT(counter.toString, o), labeledStatement2, labeledStatement3, o), counter3)
+    case While2(expr1, statement2, o) =>
       val (labeledStatement2, counter2) = label(statement2)(counter + 1)
-      (LabeledWhile3(expr1, counter, labeledStatement2, origin), counter2)
+      (LabeledWhile3(expr1, SINT(counter.toString, o), labeledStatement2, o), counter2)
   }
 
   def labelToOriginMap(labeled1: Labeled1): Map[Int, Origin] = labelToOriginMap(labeled1.labeledstatement1)

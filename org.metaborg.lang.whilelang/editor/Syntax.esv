@@ -21,10 +21,10 @@ menus
     action: "Format"          = editor-format (source)
     action: "Show parsed AST" = debug-show-aterm (source)
   
-  menu: "Transform" (openeditor)
-    
-    action: "Show labeled AST" = debug-label-aterm (source)
-    action: "Show labeled"     = debug-show-labeled (source)
+//  menu: "Transform" (openeditor)
+//    
+//    action: "Show labeled AST" = debug-label-aterm (source)
+//    action: "Show labeled"     = debug-show-labeled (source)
 
 views
   

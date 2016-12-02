@@ -1,7 +1,0 @@
-module analysis/types-sig
-
-
-signature
-  constructors
-    Int  : Type
-    Bool : Type

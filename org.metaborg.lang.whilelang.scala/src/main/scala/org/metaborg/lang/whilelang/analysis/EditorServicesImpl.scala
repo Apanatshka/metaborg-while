@@ -1,4 +1,4 @@
-package org.metaborg.lang.whilelang.strategies
+package org.metaborg.lang.whilelang.analysis
 
 import org.metaborg.lang.whilelang.ast.MExpr.SExpr
 import org.metaborg.lang.whilelang.ast.MStatement.SLabeledStatement._
@@ -7,17 +7,17 @@ import org.metaborg.lang.whilelang.ast.Utils
 import org.metaborg.popa.mfp.{IntraControlFlow, IntraMaximalFixedPoint, Lattice}
 import org.metaborg.scalaterms.Origin
 import org.metaborg.scalaterms.spoofax._
-import org.spoofax.interpreter.core.Context
-import org.spoofax.terms.util.NotImplementedException
+import org.strategoxt.lang.Context
 
 
 /**
-  * Created by jeff on 28/11/16.
+  * `editor-analyze` implementation
   */
-class EditorServicesImpl extends EditorServices {
+object EditorServicesImpl extends EditorServices {
   override def editorAnalyze(generalStrategyInput: GeneralStrategyInput)
                             (implicit context: Context): AnalysisResult = {
-    val startOfFile = generalStrategyInput.ast.origin.zero
+    context.getIOAgent.printError("TEST3")
+    val startOfFile = generalStrategyInput.ast.origin.get.zero
 
     type Label = Int
     type Property = Set[SExpr]
@@ -75,10 +75,4 @@ class EditorServicesImpl extends EditorServices {
         generalStrategyInput.makeAnalysisResult(List(), List(), notes)
     }
   }
-
-  override def editorResolve(focusedStrategyInput: FocusedStrategyInput)
-                            (implicit context: Context): ResolutionResult = throw new NotImplementedException()
-
-  override def editorHover(focusedStrategyInput: FocusedStrategyInput)
-                          (implicit context: Context): HoverResult = throw new NotImplementedException()
 }

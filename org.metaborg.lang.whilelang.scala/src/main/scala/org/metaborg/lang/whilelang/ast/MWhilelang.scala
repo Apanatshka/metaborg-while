@@ -23,23 +23,23 @@ object MWhilelang {
     }
 
     case class While1(statement1: SStatement, origin: scalaterms.Origin) extends SStart {
-      override def toSTerm = STerm.Cons("While", scala.List(statement1.toSTerm), origin)
+      override def toSTerm = STerm.Cons("While", scala.List(statement1.toSTerm), Some(origin))
     }
     object While1 extends scalaterms.TermLikeCompanion[While1] {
       override val fromSTerm: scalaterms.FromSTerm[While1] = new scalaterms.FromSTerm[While1] {
         override def unapply(term: STerm): Option[While1] = term match {
-          case STerm.Cons("While", scala.List(SStatement.fromSTerm(statement1)), o) => scala.Some(While1(statement1, o))
+          case STerm.Cons("While", scala.List(SStatement.fromSTerm(statement1)), Some(o)) => scala.Some(While1(statement1, o))
           case _ => None
         }
       }
     }
     case class Labeled1(labeledstatement1: SLabeledStatement, origin: scalaterms.Origin) extends SStart {
-      override def toSTerm = STerm.Cons("Labeled", scala.List(labeledstatement1.toSTerm), origin)
+      override def toSTerm = STerm.Cons("Labeled", scala.List(labeledstatement1.toSTerm), Some(origin))
     }
     object Labeled1 extends scalaterms.TermLikeCompanion[Labeled1] {
       override val fromSTerm: scalaterms.FromSTerm[Labeled1] = new scalaterms.FromSTerm[Labeled1] {
         override def unapply(term: STerm): Option[Labeled1] = term match {
-          case STerm.Cons("Labeled", scala.List(SLabeledStatement.fromSTerm(labeledstatement1)), o) => scala.Some(Labeled1(labeledstatement1, o))
+          case STerm.Cons("Labeled", scala.List(SLabeledStatement.fromSTerm(labeledstatement1)), Some(o)) => scala.Some(Labeled1(labeledstatement1, o))
           case _ => None
         }
       }
