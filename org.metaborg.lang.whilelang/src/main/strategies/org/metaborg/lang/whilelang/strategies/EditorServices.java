@@ -14,4 +14,22 @@ public class EditorServices {
 			return EditorServicesImpl$.MODULE$.editorAnalyze(context, current);
 		}
 	}
+	
+	public static final editor_hover_0_0 editor_hover_0_0 = new editor_hover_0_0();
+	
+	static class editor_hover_0_0 extends Strategy {
+		@Override
+		public IStrategoTerm invoke(Context context, IStrategoTerm current) {
+			return EditorServicesImpl$.MODULE$.editorHover(context, current);
+		}
+	}
+	
+	public static final editor_resolve_0_0 editor_resolve_0_0 = new editor_resolve_0_0();
+	
+	static class editor_resolve_0_0 extends Strategy {
+		@Override
+		public IStrategoTerm invoke(Context context, IStrategoTerm current) {
+			return EditorServicesImpl$.MODULE$.editorResolve(context, current);
+		}
+	}
 }

@@ -39,10 +39,9 @@ rules
       
   pp-debug :
     ast -> result
-    with
-       result := <pp-Whilelang-string> ast
-    <+ <bottomup(try(not(is-string); not(is-list); not(pp-Whilelang-string); debug(!"cannot pp ")))> ast
-    ;  result := ""
+    with result := <pp-Whilelang-string> ast
+      <+ <bottomup(try(not(is-string); not(is-list); not(pp-Whilelang-string); debug(!"cannot pp ")))> ast
+       ;  result := ""
 
 rules
   
