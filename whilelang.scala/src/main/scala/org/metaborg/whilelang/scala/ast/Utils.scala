@@ -15,6 +15,19 @@ import org.metaborg.whilelang.scala.ast.MWhilelang.SStart.{Labeled1, While1}
   * Traversals over de AST to collect interesting things
   */
 object Utils {
+  def cartesianProduct[A, B](as: Set[A], bs: Set[B]): Set[((A, B))] = for {a <- as; b <- bs} yield (a, b)
+
+  def collectRefs(labeledstatement: SLabeledStatement): Set[String] = labeledstatement match {
+    case LabeledAssign3(id1, expr2, int3) => collectRefs(expr2)
+    case LabeledSkip1(int1) => Set.empty
+    case SLabeledStatement.Seq2(labeledstatement1,
+                                labeledstatement2) => collectRefs(labeledstatement1) union collectRefs(labeledstatement2)
+    case LabeledIfThenElse4(expr1, int2, labeledstatement3, labeledstatement4) => collectRefs(expr1) union collectRefs(
+      labeledstatement3) union collectRefs(labeledstatement3)
+    case LabeledWhile3(expr1, int2, labeledstatement3) => collectRefs(expr1) union collectRefs(labeledstatement3)
+  }
+
+  def collectRefs(labeled: Labeled1): Set[String] = collectRefs(labeled.labeledstatement1)
 
   def labelToAstMap(labeledstatement: SLabeledStatement): Map[Int, SLabeledStatement] = labeledstatement match {
     case LabeledAssign3(id1, expr2, int3) => Map((int3, labeledstatement))
