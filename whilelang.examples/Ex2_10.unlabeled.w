@@ -1,4 +1,4 @@
-#labeled
+#labeled // Live Variables example
 [x := 2]1;
 [y := 4]2;
 [x := 1]3;

@@ -1,3 +1,4 @@
+// Live Variables example
 x := 2;
 y := 4;
 x := 1;

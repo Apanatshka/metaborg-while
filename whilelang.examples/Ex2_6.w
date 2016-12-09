@@ -1,4 +1,4 @@
-#labeled
+#labeled // Reaching Definitions example
 [x := 5]1;
 [y := 1]2;
 while [x > 1]3
