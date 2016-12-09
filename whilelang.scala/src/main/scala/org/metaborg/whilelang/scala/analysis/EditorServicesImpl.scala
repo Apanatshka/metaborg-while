@@ -23,7 +23,9 @@ object EditorServicesImpl extends EditorServices {
         val labeledAst = Utils.label(ast)
         val ae = AvailableExpressions.run(labeledAst)
         val rd = ReachingDefinitions.run(labeledAst)
-        AnalysisResult(rd.ast, ae.errors ++ rd.errors, ae.warnings ++ rd.warnings, ae.notes ++ rd.notes)
+        val vb = VeryBusyExpressions.run(labeledAst)
+        val lv = LiveVariables.run(labeledAst)
+        AnalysisResult(rd.ast, ae.errors ++ rd.errors ++ vb.errors ++ lv.errors, ae.warnings ++ rd.warnings ++ vb.warnings ++ lv.warnings, ae.notes ++ rd.notes ++ vb.notes ++ lv.notes)
     }
   }
 }
