@@ -36,10 +36,10 @@ object AvailableExpressions extends ClassicalAnalysis {
 
   override def flow(ast: Start): IntraControlFlow[Label] = Utils.flow(ast)
 
-  override def extremalValue(ast: Start): Set[Prop] = Set.empty
+  override def extremalValue(ast: Start): Property = Set.empty
 
   override def kill(node: RelevantNode,
-                    property: Set[Prop]): Set[Prop] = node match {
+                    property: Property): Property = node match {
     case LabeledAssign3(id1, expr2, int3) => property.filter(p => Utils.collectRefs(p).contains(id1.string))
     case LabeledSkip1(int1) => Set.empty
     case Seq2(labeledstatement1, labeledstatement2) => Set.empty
@@ -47,7 +47,7 @@ object AvailableExpressions extends ClassicalAnalysis {
     case LabeledWhile3(expr1, int2, labeledstatement3) => Set.empty
   }
 
-  override def gen(node: RelevantNode): Set[Prop] = node match {
+  override def gen(node: RelevantNode): Property = node match {
     case LabeledAssign3(id1, expr2, int3) =>
       Utils.collectAExprs(expr2).filterNot(p => Utils.collectRefs(p).contains(id1.string))
     case LabeledSkip1(int1) => Set.empty

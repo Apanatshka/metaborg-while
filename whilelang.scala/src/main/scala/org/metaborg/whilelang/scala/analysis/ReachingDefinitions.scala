@@ -32,7 +32,7 @@ object ReachingDefinitions extends ClassicalAnalysis {
 
   override def flow(ast: Start): IntraControlFlow[Label] = Utils.flow(ast)
 
-  override def extremalValue(ast: Start): Set[Prop] = {
+  override def extremalValue(ast: Start): Property = {
     val refs = Utils.collectRefs(ast)
     refs.map((_, None))
   }
@@ -46,7 +46,7 @@ object ReachingDefinitions extends ClassicalAnalysis {
     AnalysisResult(ast.toSTerm, errors = List(), warnings = List(), notes)
   }
 
-  override def kill(nodes: RelevantNode, property: Set[Prop]): Set[Prop] = nodes match {
+  override def kill(nodes: RelevantNode, property: Property): Property = nodes match {
     case LabeledAssign3(id1, expr2, int3) => property.filter(p => id1.string == p._1)
     case LabeledSkip1(int1) => Set.empty
     case Seq2(labeledstatement1, labeledstatement2) => Set.empty
@@ -54,7 +54,7 @@ object ReachingDefinitions extends ClassicalAnalysis {
     case LabeledWhile3(expr1, int2, labeledstatement3) => Set.empty
   }
 
-  override def gen(nodes: RelevantNode): Set[Prop] = nodes match {
+  override def gen(nodes: RelevantNode): Property = nodes match {
     case LabeledAssign3(id1, expr2, int3) => Set((id1.string, Some(SINTToInt(int3))))
     case LabeledSkip1(int1) => Set.empty
     case Seq2(labeledstatement1, labeledstatement2) => Set.empty

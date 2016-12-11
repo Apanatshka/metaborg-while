@@ -25,7 +25,11 @@ object EditorServicesImpl extends EditorServices {
         val rd = ReachingDefinitions.run(labeledAst)
         val vb = VeryBusyExpressions.run(labeledAst)
         val lv = LiveVariables.run(labeledAst)
-        AnalysisResult(rd.ast, ae.errors ++ rd.errors ++ vb.errors ++ lv.errors, ae.warnings ++ rd.warnings ++ vb.warnings ++ lv.warnings, ae.notes ++ rd.notes ++ vb.notes ++ lv.notes)
+        val cp = ConstantPropagation.run(labeledAst)
+        AnalysisResult(rd.ast,
+                       ae.errors ++ rd.errors ++ vb.errors ++ lv.errors ++ cp.errors,
+                       ae.warnings ++ rd.warnings ++ vb.warnings ++ lv.warnings ++ cp.warnings,
+                       ae.notes ++ rd.notes ++ vb.notes ++ lv.notes ++ cp.notes)
     }
   }
 }
