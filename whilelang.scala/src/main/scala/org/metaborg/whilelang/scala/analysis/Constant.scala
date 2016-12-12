@@ -46,7 +46,7 @@ object Constant {
 
   def glb(c1: Constant, c2: Constant): Option[Constant] = if (c1 == c2) Some(c1) else None
 
-  def semiEvaluate(expr: SExpr)(implicit mapping: Map[String, Constant]): Constant = expr match {
+  def constEvaluate(expr: SExpr)(implicit mapping: Map[String, Constant]): Constant = expr match {
     case Ref1(id1) => mapping(id1.string)
     case Num1(int1) => CInt(int1)
     case Add2(expr1, expr2) => liftArith(_ + _)(expr1, expr2)
@@ -55,7 +55,7 @@ object Constant {
     case Div2(expr1, expr2) => liftArith(_ / _)(expr1, expr2)
     case True0() => CBool(true)
     case False0() => CBool(false)
-    case Not1(expr1) => semiEvaluate(expr1) match {
+    case Not1(expr1) => constEvaluate(expr1) match {
       case CBool(b) => CBool(!b);
       case _ => Top
     }
@@ -70,21 +70,21 @@ object Constant {
 
   def liftArith(arithFun: (Int, Int) => Int)
                (e1: SExpr, e2: SExpr)
-               (implicit mapping: Map[String, Constant]): Constant = (semiEvaluate(e1), semiEvaluate(e2)) match {
+               (implicit mapping: Map[String, Constant]): Constant = (constEvaluate(e1), constEvaluate(e2)) match {
     case (CInt(l), CInt(r)) => CInt(arithFun(l, r))
     case _ => Top
   }
 
   def liftBool(boolFun: (Boolean, Boolean) => Boolean)
               (e1: SExpr, e2: SExpr)
-              (implicit mapping: Map[String, Constant]): Constant = (semiEvaluate(e1), semiEvaluate(e2)) match {
+              (implicit mapping: Map[String, Constant]): Constant = (constEvaluate(e1), constEvaluate(e2)) match {
     case (CBool(l), CBool(r)) => CBool(boolFun(l, r))
     case _ => Top
   }
 
   def liftComp(compFun: (Int, Int) => Boolean)
               (e1: SExpr, e2: SExpr)
-              (implicit mapping: Map[String, Constant]): Constant = (semiEvaluate(e1), semiEvaluate(e2)) match {
+              (implicit mapping: Map[String, Constant]): Constant = (constEvaluate(e1), constEvaluate(e2)) match {
     case (CInt(l), CInt(r)) => CBool(compFun(l, r))
     case _ => Top
   }

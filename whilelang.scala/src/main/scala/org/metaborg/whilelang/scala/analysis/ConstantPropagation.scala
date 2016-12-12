@@ -68,7 +68,7 @@ object ConstantPropagation extends BasicAnalysis {
 
   override def transfer(node: SLabeledStatement, property: Property): Property = node match {
     case LabeledAssign3(id1, expr2, int3) => property.map { mapping =>
-      mapping.updated(id1.string, Constant.semiEvaluate(expr2)(mapping))
+      mapping.updated(id1.string, Constant.constEvaluate(expr2)(mapping))
     }
     case LabeledSkip1(int1) => property
     case Seq2(labeledstatement1, labeledstatement2) => property
