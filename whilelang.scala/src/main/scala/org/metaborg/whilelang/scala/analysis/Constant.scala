@@ -38,7 +38,7 @@ case class CBool(value: Boolean) extends Constant {
 }
 
 case object Top extends Constant {
-  override def toString: String = "top"
+  override def toString: String = "⊤"
 }
 
 object Constant {

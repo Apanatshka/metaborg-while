@@ -19,7 +19,7 @@ object ReachingDefinitions extends ClassicalAnalysis {
   override type Result = AnalysisResult
 
   override def prepareProp(prop: Prop): String =
-    (prop._1, prop._2.map(_.toString).getOrElse("?")).toString
+    (prop._1, prop._2.map(_.toString).getOrElse("⊤")).toString
 
   override def labelMap(ast: Start): Map[Label, RelevantNode] = Utils.labelToAstMap(ast)
 

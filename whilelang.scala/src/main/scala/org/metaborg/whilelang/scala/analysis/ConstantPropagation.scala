@@ -77,7 +77,7 @@ object ConstantPropagation extends BasicAnalysis {
   }
 
   override def prepareProperty(property: Option[Map[String, Constant]]): String = property match {
-    case None => "bottom"
-    case Some(m) => if (m.values.forall(_ == Top)) "top" else m.mkString("[", ";", "]")
+    case None => "⊥"
+    case Some(m) => if (m.values.forall(_ == Top)) "⊤" else m.mkString("[", ";", "]")
   }
 }
