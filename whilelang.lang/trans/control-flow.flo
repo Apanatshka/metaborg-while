@@ -6,23 +6,16 @@ While(statement): statement
 
 Assign(_, expr): expr
 
-Seq(st1, st2): st1, st2
+Seq(_, _): sequential
 
 IfThenElse(cond, then, else): cond, (then || else)
 
-While(cond, body): cond, (body, loop || this)
+While(cond, body): cond, (body, jump cond || end)
 
-Ref(_): this
-Num(_): this
-Add(e1, e2): e1 || e2
-Sub(e1, e2): e1 || e2
-Mul(e1, e2): e1 || e2
-Div(e1, e2): e1 || e2
-Not(e): e
-And(e1, e2): e1 || e2
-Or(e1, e2): e1 || e2
-Eq(e1, e2): e1 || e2
-Gt(e1, e2): e1 || e2
-Gte(e1, e2): e1 || e2
-Lt(e1, e2): e1 || e2
-Lte(e1, e2): e1 || e2
+Ref(_), Num(_): opaque
+
+Add(_, _), Sub(_, _), Mul(_, _), Div(_, _): parallel
+
+Not(_), And(_, _), Or(_, _): parallel
+
+Eq(_, _), Gt(_, _), Gte(_, _), Lt(_, _), Lte(_, _): parallel
