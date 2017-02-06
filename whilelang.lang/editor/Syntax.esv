@@ -21,8 +21,9 @@ menus
     action: "Format"          = editor-format (source)
     action: "Show parsed AST" = debug-show-aterm (source)
   
-//  menu: "Transform" (openeditor)
-//    
+  menu: "Transform" (openeditor)
+    
+    action: "Show Control Flow Constraints" = debug-show-control-flow-constraints
 //    action: "Show labeled AST" = debug-label-aterm (source)
 //    action: "Show labeled"     = debug-show-labeled (source)
 

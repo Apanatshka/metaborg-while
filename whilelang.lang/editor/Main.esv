@@ -11,8 +11,8 @@ language
 
   provider : target/metaborg/stratego.ctree
   provider : target/metaborg/stratego-javastrat.jar
-  provider : target/metaborg/whilelang.scala-1.0-SNAPSHOT.jar // use this for commandline maven build
-//  provider : ../org.metaborg.whilelang.scala/target/whilelang.scala-1.0-SNAPSHOT.jar // use this in Eclipse (bypasses the copying step by using a relative path, but only works inside eclipse)
-  provider : target/metaborg/scala-library-2.11.8.jar
-  provider : target/metaborg/scalaterms-2.1.0-SNAPSHOT.jar
-  provider : target/metaborg/popa-experiments-1.0-SNAPSHOT.jar
+//  provider : target/metaborg/whilelang.scala-1.0-SNAPSHOT.jar // use this for commandline maven build
+////  provider : ../org.metaborg.whilelang.scala/target/whilelang.scala-1.0-SNAPSHOT.jar // use this in Eclipse (bypasses the copying step by using a relative path, but only works inside eclipse)
+//  provider : target/metaborg/scala-library-2.11.8.jar
+//  provider : target/metaborg/scalaterms-2.1.0-SNAPSHOT.jar
+//  provider : target/metaborg/popa-experiments-1.0-SNAPSHOT.jar

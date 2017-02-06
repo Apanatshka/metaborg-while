@@ -1,0 +1,10 @@
+module static-semantics
+
+/**
+This is a stub file to get the ast indexed so we can use it in the control flow generation rules. 
+*/
+
+rules
+
+init ^ ().
+[[ t ^ () ]].

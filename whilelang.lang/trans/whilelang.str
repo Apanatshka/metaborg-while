@@ -7,6 +7,7 @@ imports
   outline
   analysis
   label
+  control-flow
 
 rules // Debugging
   
@@ -23,3 +24,9 @@ rules // Debugging
     ; result   := <to-labeled> node
 
   debug-show-labeled = (to-labeled, id, id, id, id); editor-format
+  
+  debug-show-control-flow-constraints:
+    (node, _, _, path, project-path) -> (filename, result)
+    with
+      filename := <guarantee-extension(|"aterm")> path
+    ; result   := <flowspec--generate-cfg-constraint> node

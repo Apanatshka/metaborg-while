@@ -1,21 +1,44 @@
 module control-flow
 
-flow rules
+properties
 
-While(statement): statement
+  Write name  (upward)
+  Read name  (upward)
+  Value Value
 
-Assign(_, expr): expr
+flow graph rules
 
-Seq(_, _): sequential
+  While(st):
+    st.
+  
+  Assign(x, e):
+    e -> x.
+  
+  Skip().
+  
+  Seq(st1, st2):
+    st1 -> st2.
 
-IfThenElse(cond, then, else): cond, (then || else)
+  IfThenElse(e, s1, s2):
+    entry -> e,
+    e -> s1 where e: Value True(),
+    e -> s2 where e: Value False(),
+    s1 -> exit,
+    s2 -> exit.
 
-While(cond, body): cond, (body, jump cond || end)
+  While(e, s1):
+    entry -> e,
+    e -> s1 where e: Value True(),
+    s1 -> e,
+    e -> exit where e: Value False().
 
-Ref(_), Num(_): opaque
-
-Add(_, _), Sub(_, _), Mul(_, _), Div(_, _): parallel
-
-Not(_), And(_, _), Or(_, _): parallel
-
-Eq(_, _), Gt(_, _), Gte(_, _), Lt(_, _), Lte(_, _): parallel
+  Ref(_), Num(_), True(), False().
+  
+  Add(e1, e2), Sub(e1, e2), Mul(e1, e2), Or(e1, e2), And(e1, e2),
+  Eq(e1, e2), Gt(e1, e2), Gte(e1, e2), Lt(e1, e2), Lte(e1, e2):
+    entry -> e1,
+    entry -> e2,
+    e1 -> exit,
+    e2 -> exit.
+  
+  Not(e): e.
