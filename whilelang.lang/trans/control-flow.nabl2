@@ -1,0 +1,21 @@
+module control-flow
+
+imports
+
+  signatures/-
+
+signature
+  name resolution
+    namespaces
+      AST
+
+  rules
+  
+  
+  init ^ (globalExit) :=
+    new globalExit.
+  
+  [[ rootNode ^ (globalExit) ]] :=
+    [[ rootNode ^ (entry, globalExit) ]].
+    
+  [[ Root(_) ^ (entry, exit) ]].
