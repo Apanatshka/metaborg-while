@@ -6,7 +6,7 @@ signatures/-
 
 rules
 
-to-labeled: While(statement) -> Labeled(labeledSt)
+to-labeled: Root(statement) -> Labeled(labeledSt)
 with {| count:
   rules(count : _ -> 1)
 ; labeledSt := <topdown(try(to-labeled(counter)))> statement

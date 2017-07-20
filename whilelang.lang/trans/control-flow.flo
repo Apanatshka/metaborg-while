@@ -1,21 +1,13 @@
 module control-flow
 
-flow rules
+cfg Root(st) = entry -> cfg st -> exit
 
-While(statement): statement
+cfg Assign(_, e) = entry -> e -> exit
 
-Assign(_, expr): expr
+cfg Seq(s1, s2) = entry -> cfg s1 -> cfg s2 -> exit
 
-Seq(_, _): sequential
+cfg IfThenElse(c, t, e) =
+  entry -> c -> cfg t -> exit,
+           c -> cfg e -> exit
 
-IfThenElse(cond, then, else): cond, (then || else)
-
-While(cond, body): cond, (body, jump cond || end)
-
-Ref(_), Num(_): opaque
-
-Add(_, _), Sub(_, _), Mul(_, _), Div(_, _): parallel
-
-Not(_), And(_, _), Or(_, _): parallel
-
-Eq(_, _), Gt(_, _), Gte(_, _), Lt(_, _), Lte(_, _): parallel
+cfg While(c, b) = entry -> c -> cfg b -> c -> exit

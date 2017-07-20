@@ -1,14 +1,12 @@
 module Analysis
 
+imports
+  nabl2/Menus
+  nabl2/References
+
 language
 
-  observer : editor-analyze// (multifile)
-  context  : legacy
-  
-references
-
-  reference _ : editor-resolve
-  hover _     : editor-hover
+  observer : editor-analyze (constraint) (multifile)
 
 menus
   

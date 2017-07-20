@@ -10,8 +10,8 @@ context-free start-symbols
 
 context-free syntax
   
-  Start.While = Statement
-  Start.While = [[Statement];]
+  Start.Root = Statement
+  Start.Root = [[Statement];]
   Start.Labeled = [#labeled
 [LabeledStatement]]
   Start.Labeled = [#labeled

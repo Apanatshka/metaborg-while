@@ -2,42 +2,40 @@ module analysis
 
 imports
   
-//  libspoofax/core/language
-//  runtime/index/-
-//  runtime/nabl/-
-//  runtime/properties/-
-//  runtime/types/-
-//  runtime/task/-
-//  runtime/analysis/-
+  nabl2/api
+  nabl2shared
+  nabl2runtime
+  
+  nabl2/control-flow
   
   pp
 
 rules // Analysis
 
-//*/ Add or remove the second slash at the start of this line to switch
+/*/ Add or remove the second slash at the start of this line to switch
   external editor-analyze(|)
-/*/
-  editor-analyze = analyze-all(id, id, id|<language>)
+/*/ 
+  editor-analyze = nabl2-analyze(id)
 //*/
 
 rules // Editor services
 
-//*/ Add or remove the second slash at the start of this line to switch
+/*/ Add or remove the second slash at the start of this line to switch
   external editor-resolve(|)
 /*/
-  editor-resolve(|):
-    (node, _, _, _, project-path) -> definition
-    where
-      definition := <analysis-resolve(|<language>, project-path)> node
+//  editor-resolve(|):
+//    (node, _, _, _, project-path) -> definition
+//    where
+//      definition := <analysis-resolve(|<language>, project-path)> node
 //*/
 
-//*/ Add or remove the second slash at the start of this line to switch
+/*/ Add or remove the second slash at the start of this line to switch
   external editor-hover(|)
 /*/
-  editor-hover:
-    (node, _, _, _, project-path) -> label
-    where
-      label := <get-editor-properties(pp-partial-Whilelang-string|<language>, project-path); properties-to-html> node
+//  editor-hover:
+//    (node, _, _, _, project-path) -> label
+//    where
+//      label := <get-editor-properties(pp-partial-Whilelang-string|<language>, project-path); properties-to-html> node
 //*/
 
 rules // Debugging
@@ -47,24 +45,3 @@ rules // Debugging
     with
       filename := <guarantee-extension(|"analyzed.aterm")> path;
       result   := ast
-  
-//  debug-index-project =
-//    analysis-debug-index-project(|<language>)
-//  debug-index-project-resolve = 
-//    analysis-debug-index-project-resolve(|<language>)
-//  debug-index-partition =
-//    analysis-debug-index-partition(|<language>)
-//
-//  debug-task-project =
-//    analysis-debug-task-project(|<language>)
-//  debug-task-partition =
-//    analysis-debug-task-partition(|<language>)
-//  debug-task-selection =
-//    analysis-debug-task-selection(|<language>)
-//  debug-index-partition-resolve =
-//    analysis-debug-index-partition-resolve(|<language>)
-//    
-//  debug-project =
-//    analysis-debug-project(|<language>)
-//  debug-partition =
-//    analysis-debug-partition(|<language>)
