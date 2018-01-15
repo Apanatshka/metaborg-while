@@ -2,6 +2,7 @@ module Whilelang
 
 imports
 
+  Procedure
   Statement
 
 context-free start-symbols
@@ -10,9 +11,6 @@ context-free start-symbols
 
 context-free syntax
   
-  Start.While = Statement
-  Start.While = [[Statement];]
-  Start.Labeled = [#labeled
-[LabeledStatement]]
-  Start.Labeled = [#labeled
-[LabeledStatement];]
+  Start.Root = [begin [Procedure*]
+[Statement]
+end]

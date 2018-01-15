@@ -1,50 +1,33 @@
 module analysis
 
 imports
-  
 
   nabl2/api
   nabl2shared
   nabl2runtime
-  
+
+  flowspec/editor-hover
+
   static-semantics
-  
+  control-flow
+
   pp
-  
+
   libspoofax/stratego/debug
+  
+  desugar
 
 rules // Analysis
 
-  editor-analyze = nabl2-analyze(id)
+  editor-analyze = nabl2-analyze(desugar)
 
-  nabl2-debug-constraint-generation-hook = fail
+//  nabl2-debug-constraint-generation-hook = id
 
-  nabl2-debug-analysis-hook = fail
-/*/ Add or remove the second slash at the start of this line to switch
-  external editor-analyze(|)
-/*/
-//  editor-analyze = analyze-all(id, id, id|<language>)
-//*/
+//  nabl2-debug-analysis-hook = id
 
 rules // Editor services
 
-/*/ Add or remove the second slash at the start of this line to switch
-  external editor-resolve(|)
-/*/
-//  editor-resolve(|):
-//    (node, _, _, _, project-path) -> ""
-//    where
-//      definition := <analysis-resolve(|<language>, project-path)> node
-//*/
-
-/*/ Add or remove the second slash at the start of this line to switch
-  external editor-hover(|)
-/*/
-//  editor-hover:
-//    (node, _, _, _, project-path) -> "" //label
-//    where
-//      label := <get-editor-properties(pp-partial-Whilelang-string|<language>, project-path); properties-to-html> node
-//*/
+editor-hover = flowspec--editor-hover(pp-partial-Whilelang-string)
 
 rules // Debugging
   

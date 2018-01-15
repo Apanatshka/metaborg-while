@@ -1,10 +1,127 @@
 module static-semantics
 
-/**
-This is a stub file to get the ast indexed so we can use it in the control flow generation rules. 
-*/
+imports
+  signatures/-
+  signatures/desugared/-
+
+signature
+  sorts Type
+  constructors
+    Int : Type
 
 rules
 
-init ^ ().
-[[ t ^ () ]].
+init ^ (scope) :=
+  new scope.
+
+Def [[ n ^ (scope) ]] :=
+  Var { n } <- scope,
+  Var { n } : Int().
+
+[[ DesugaredRoot(procs, main) ^ (globalscope) ]] :=
+  [[ procs ^ (filescope) ]],
+  [[ main ^ (filescope) ]],
+  new filescope.
+
+[[ Main(defs, s) ^ (filescope) ]] :=
+  Map1(Def) [[ defs ^ (filescope) ]],
+  [[ s ^ (filescope) ]].
+
+[[ ProcSeq(p, t) ^ (scope) ]] :=
+  [[ p ^ (scope) ]],
+  [[ t ^ (scope) ]].
+
+[[ ProcSeqEnd() ^ (_) ]].
+
+[[ Procedure(name, ins, out, defs, body) ^ (filescope) ]] :=
+  Proc { name } <- filescope,
+  procedurescope ---> filescope,
+  Map1 [[ ins ^ (procedurescope) ]],
+  [[ out ^ (procedurescope) ]],
+  Map1(Def) [[ defs ^ (procedurescope) ]],
+  [[ body ^ (procedurescope) ]],
+  new procedurescope.
+
+[[ Val(in) ^ (procedurescope) ]] :=
+  Var { in } <- scope,
+  Var { in } : Int().
+
+[[ Res(out) ^ (procedurescope) ]] :=
+  Var { out } <- scope,
+  Var { out } : Int().
+
+[[ Skip() ^ (scope) ]].
+
+[[ Assign(Var(n), expr) ^ (scope) ]] :=
+  Var { n } -> scope,
+  Var { n } |-> _,
+  [[ expr ^ (scope) ]].
+
+[[ Seq(st1, st2) ^ (scope) ]] :=
+  [[ st1 ^ (scope) ]],
+  [[ st2 ^ (scope) ]].
+
+[[ IfThenElse(c, t, e) ^ (scope) ]] :=
+  [[ c ^ (scope) ]],
+  [[ t ^ (scope) ]],
+  [[ e ^ (scope) ]].
+
+[[ While(c, b) ^ (scope) ]] :=
+  [[ c ^ (scope) ]],
+  [[ b ^ (scope) ]].
+
+[[ Ref(n) ^ (scope) ]] :=
+  Var { n } -> scope,
+  Var { n } |-> _.
+
+[[ Num(_) ^ (scope) ]].
+
+[[ Add(e1, e2) ^ (scope) ]] :=
+  [[ e1 ^ (scope) ]],
+  [[ e2 ^ (scope) ]].
+
+[[ Sub(e1, e2) ^ (scope) ]] :=
+  [[ e1 ^ (scope) ]],
+  [[ e2 ^ (scope) ]].
+
+[[ Mul(e1, e2) ^ (scope) ]] :=
+  [[ e1 ^ (scope) ]],
+  [[ e2 ^ (scope) ]].
+
+[[ Div(e1, e2) ^ (scope) ]] :=
+  [[ e1 ^ (scope) ]],
+  [[ e2 ^ (scope) ]].
+
+[[ True() ^ (scope) ]].
+[[ False() ^ (scope) ]].
+
+[[ Not(e) ^ (scope) ]] :=
+  [[ e ^ (scope) ]].
+
+[[ And(e1, e2) ^ (scope) ]] :=
+  [[ e1 ^ (scope) ]],
+  [[ e2 ^ (scope) ]].
+
+[[ Or(e1, e2) ^ (scope) ]] :=
+  [[ e1 ^ (scope) ]],
+  [[ e2 ^ (scope) ]].
+
+[[ Eq(e1, e2) ^ (scope) ]] :=
+  [[ e1 ^ (scope) ]],
+  [[ e2 ^ (scope) ]].
+
+[[ Gt(e1, e2) ^ (scope) ]] :=
+  [[ e1 ^ (scope) ]],
+  [[ e2 ^ (scope) ]].
+
+[[ Gte(e1, e2) ^ (scope) ]] :=
+  [[ e1 ^ (scope) ]],
+  [[ e2 ^ (scope) ]].
+
+[[ Lt(e1, e2) ^ (scope) ]] :=
+  [[ e1 ^ (scope) ]],
+  [[ e2 ^ (scope) ]].
+
+[[ Lte(e1, e2) ^ (scope) ]] :=
+  [[ e1 ^ (scope) ]],
+  [[ e2 ^ (scope) ]].

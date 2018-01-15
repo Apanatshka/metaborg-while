@@ -1,44 +1,56 @@
 module control-flow
 
-properties
+ast root DesugaredRoot(_, _)
 
-  Write name  (upward)
-  Read name  (upward)
-  Value Value
+cfg DesugaredRoot(procs, main) = cfg main, cfg procs
 
-flow graph rules
+cfg ProcSeq(p, tail) = cfg p, cfg tail
 
-  While(st):
-    st.
-  
-  Assign(x, e):
-    e -> x.
-  
-  Skip().
-  
-  Seq(st1, st2):
-    st1 -> st2.
+cfg ProcSeqEnd() = entry -> exit
 
-  IfThenElse(e, s1, s2):
-    entry -> e,
-    e -> s1 where e: Value True(),
-    e -> s2 where e: Value False(),
-    s1 -> exit,
-    s2 -> exit.
+cfg root Procedure(_, _, _, _, s) = start -> cfg s -> end
 
-  While(e, s1):
-    entry -> e,
-    e -> s1 where e: Value True(),
-    s1 -> e,
-    e -> exit where e: Value False().
+cfg root m@Main(_, s) = start -> cfg s -> m -> end
 
-  Ref(_), Num(_), True(), False().
-  
-  Add(e1, e2), Sub(e1, e2), Mul(e1, e2), Or(e1, e2), And(e1, e2),
-  Eq(e1, e2), Gt(e1, e2), Gte(e1, e2), Lt(e1, e2), Lte(e1, e2):
-    entry -> e1,
-    entry -> e2,
-    e1 -> exit,
-    e2 -> exit.
-  
-  Not(e): e.
+cfg this@Assign(_, e) =
+  entry -> cfg e -> this -> exit
+
+cfg Skip() = entry -> exit
+
+cfg Seq(s1,s2) = entry -> cfg s1 -> cfg s2 -> exit
+
+cfg IfThenElse(c, t, e) =
+  entry -> cfg c -> cfg t -> exit, 
+           cfg c -> cfg e -> exit
+
+cfg While(e, s) =
+  entry -> cfg e -> cfg s -> cfg e -> exit
+
+cfg e@Ref(_) = entry -> e -> exit
+cfg e@Num(_) = entry -> e -> exit
+cfg e@Add(l,r) = entry -> cfg l -> cfg r -> e -> exit
+cfg e@Sub(l,r) = entry -> cfg l -> cfg r -> e -> exit
+cfg e@Mul(l,r) = entry -> cfg l -> cfg r -> e -> exit
+cfg e@Div(l,r) = entry -> cfg l -> cfg r -> e -> exit
+cfg e@True() = entry -> e -> exit
+cfg e@False() = entry -> e -> exit
+cfg e@Not(s) = entry -> cfg s -> e -> exit
+cfg e@And(l,r) = entry -> cfg l -> cfg r -> e -> exit
+cfg e@Or(l,r) = entry -> cfg l -> cfg r -> e -> exit
+cfg e@Eq(l,r) = entry -> cfg l -> cfg r -> e -> exit
+cfg e@Gt(l,r) = entry -> cfg l -> cfg r -> e -> exit
+cfg e@Gte(l,r) = entry -> cfg l -> cfg r -> e -> exit
+cfg e@Lt(l,r) = entry -> cfg l -> cfg r -> e -> exit
+cfg e@Lte(l,r) = entry -> cfg l -> cfg r -> e -> exit
+
+prop live: MaySet(term) // should be MaySet(name) but that has no effect yet
+
+live(Ref(n) -> next) = live(next) \/ {n}
+
+live(Assign(Var(n), _) -> next) = live(next) \ {n}
+
+live(Main(vars, _) -> next) = live(next) \/ Set.fromList(vars)
+
+live(_ -> next) = live(next)
+
+//live(end) = {}

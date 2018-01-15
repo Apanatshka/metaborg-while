@@ -20,13 +20,9 @@ menus
     
     action: "Format"          = editor-format (source)
     action: "Show parsed AST" = debug-show-aterm (source)
-  
-  menu: "Transform" (openeditor)
+    action: "Show desugared AST" = debug-show-desugared (source)
+    action: "Show analyzed AST" = debug-show-analyzed
     
-    action: "Show Control Flow Constraints" = debug-show-control-flow-constraints
-//    action: "Show labeled AST" = debug-label-aterm (source)
-//    action: "Show labeled"     = debug-show-labeled (source)
-
 views
   
   outline view: editor-outline (source)

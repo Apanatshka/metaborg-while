@@ -1,0 +1,26 @@
+module desugared/TopLevel
+
+imports
+  Statement
+  Common
+  Procedure
+
+context-free syntax
+
+  Def = ID
+
+  Start.DesugaredRoot = [begin [ProcSeq]
+  [Main]
+end]
+
+  Procedure.Procedure = [proc [ID](val [{Val ", "}+], res [Res]) is
+  // Defs: [{Def ", "}*]
+  [Statement]
+end]
+
+  Main.Main = [// Defs: [{Def ", "}+]
+  [Statement]]
+  
+  ProcSeq.ProcSeq = [[Procedure]
+[ProcSeq]]
+  ProcSeq.ProcSeqEnd =

@@ -1,0 +1,7 @@
+module Transform
+
+menus
+  
+  menu: "Transform" (openeditor)
+    
+    action: "Eliminate dead code (DCE)" = debug-show-dce

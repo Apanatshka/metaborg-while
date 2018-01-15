@@ -6,27 +6,24 @@ imports
   pp
   outline
   analysis
-  label
-  control-flow
+  dead-code-elimination
 
 rules // Debugging
-  
+
   debug-show-aterm:
     (node, _, _, path, project-path) -> (filename, result)
     with
       filename := <guarantee-extension(|"aterm")> path
     ; result   := node
-  
-  debug-label-aterm:
-    (node, _, _, path, project-path) -> (filename, result)
-    with
-      filename := <guarantee-extension(|"aterm")> path
-    ; result   := <to-labeled> node
 
-  debug-show-labeled = (to-labeled, id, id, id, id); editor-format
-  
-  debug-show-control-flow-constraints:
+  debug-show-desugared:
     (node, _, _, path, project-path) -> (filename, result)
     with
       filename := <guarantee-extension(|"aterm")> path
-    ; result   := <flowspec--generate-cfg-constraint> node
+    ; result   := <desugar> node
+
+  debug-show-dce:
+    (node, _, _, path, project-path) -> (filename, result)
+    with
+      filename := <guarantee-extension(|"dce.w")> path
+    ; result   := <eliminate-dead-code; pp-Whilelang-string> node

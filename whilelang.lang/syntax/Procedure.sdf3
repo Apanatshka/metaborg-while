@@ -1,0 +1,16 @@
+module Procedure
+
+imports
+
+  Statement
+  Common
+
+context-free syntax
+
+  Procedure.Procedure = [proc [ID](val [{Val ", "}+], res [Res]) is
+  [Statement]
+end]
+
+  Val.Val = ID
+  
+  Res.Res = ID

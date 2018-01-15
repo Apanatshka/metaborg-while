@@ -1,0 +1,18 @@
+module desugar
+
+imports
+
+signatures/-
+signatures/desugared/-
+libspoofax/term/origin
+libspoofax/stratego/debug
+
+strategies
+
+desugar: Root(proc*, main) -> DesugaredRoot(<foldr(!ProcSeqEnd(), \(h,t) -> ProcSeq(<desugar> h,t)\)> proc*, Main(def*, main))
+with def* := <find-names> main
+
+desugar: Procedure(name, in*, out, body) -> Procedure(name, in*, out, def*, body)
+with def* := <find-names> body
+
+find-names = collect-all(?Ref(<id>) + ?Var(<id>));map(origin-strip)
