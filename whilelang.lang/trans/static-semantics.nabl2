@@ -5,9 +5,10 @@ imports
   signatures/desugared/-
 
 signature
-  sorts Type
+  sorts Type  ArtificialName
   constructors
     Int : Type
+    Main : ArtificialName
 
 rules
 
@@ -24,8 +25,12 @@ Def [[ n ^ (scope) ]] :=
   new filescope.
 
 [[ Main(defs, s) ^ (filescope) ]] :=
-  Map1(Def) [[ defs ^ (filescope) ]],
-  [[ s ^ (filescope) ]].
+  Proc { Main() } <- filescope,
+  Proc { Main() } ===> mainscope,
+  mainscope ---> filescope,
+  Map1(Def) [[ defs ^ (mainscope) ]],
+  [[ s ^ (mainscope) ]],
+  new mainscope.
 
 [[ ProcSeq(p, t) ^ (scope) ]] :=
   [[ p ^ (scope) ]],
@@ -35,6 +40,7 @@ Def [[ n ^ (scope) ]] :=
 
 [[ Procedure(name, ins, out, defs, body) ^ (filescope) ]] :=
   Proc { name } <- filescope,
+  Proc { name } ===> procedurescope,
   procedurescope ---> filescope,
   Map1 [[ ins ^ (procedurescope) ]],
   [[ out ^ (procedurescope) ]],

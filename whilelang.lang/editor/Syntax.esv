@@ -22,6 +22,7 @@ menus
     action: "Show parsed AST" = debug-show-aterm (source)
     action: "Show desugared AST" = debug-show-desugared (source)
     action: "Show analyzed AST" = debug-show-analyzed
+    action: "Show Flow Graph" = nabl2--show-file-control-flow-graph
     
 views
   

@@ -1,12 +1,13 @@
 module whilelang
 
 imports
-  
+
   completion/completion
   pp
   outline
   analysis
   dead-code-elimination
+  nabl2/runtime/analysis/debug
 
 rules // Debugging
 

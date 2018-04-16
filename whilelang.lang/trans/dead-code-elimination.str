@@ -6,6 +6,7 @@ signatures/-
 flowspec/api
 nabl2/api
 signatures/nabl2/runtime/analysis/Debug-sig
+signatures/flowspec/runtime/Values-sig
 
 rules
 
@@ -13,5 +14,5 @@ eliminate-dead-code = bottomup(try(dead-code-elimination))
 
 dead-code-elimination: this@Assign(Var(name), exp) -> Skip()
 where a := <nabl2-get-ast-analysis> this
-    ; Set(live-vars) := <flowspec-get-property(|a, "live")> this
+    ; Set(live-vars) := <flowspec-get-property-post(|a, "live")> this
     ; <not(getfirst(!(<id>,name);strip-annos;eq))> live-vars

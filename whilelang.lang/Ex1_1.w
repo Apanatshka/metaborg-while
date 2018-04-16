@@ -1,6 +1,6 @@
 begin
-    y := 0;
     y := x;
+    y := 0;
     z := 1;
     while y > 1 do
       (
