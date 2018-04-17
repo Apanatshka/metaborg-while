@@ -29,8 +29,5 @@ context-free syntax
 
 context-free priorities
   
-  Statement.While >
-  Statement.Seq,
-  
-  Statement.IfThenElse <2> >
+  {Statement.While Statement.IfThenElse} >
   Statement.Seq
