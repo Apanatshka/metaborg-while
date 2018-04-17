@@ -1,0 +1,22 @@
+module desugared/Expr
+
+imports
+
+  Common
+
+context-free syntax
+
+  Expr.BinOp = [[BinOp]([Expr],[Expr])]
+  Expr.UnOp = [[UnOp]([Expr])]
+  BinOp.Add = [+]
+  BinOp.Sub = [-]
+  BinOp.Mul = [*]
+  BinOp.Div = [/]
+  BinOp.And = [&&]
+  BinOp.Or  = [||]
+  BinOp.Eq  = [==]
+  BinOp.Gt  = [>]
+  BinOp.Gte = [>=]
+  BinOp.Lt  = [<]
+  BinOp.Lte = [<=]
+  UnOp.Not  = [not]

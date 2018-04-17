@@ -7,7 +7,8 @@ imports
 
 context-free syntax
 
-  Def = ID
+  Def.Def = ID
+  Output.Output = ID
 
   Start.DesugaredRoot = [begin [ProcSeq]
   [Main]
@@ -16,10 +17,12 @@ end]
   Procedure.Procedure = [proc [ID](val [{Val ", "}+], res [Res]) is
   // Defs: [{Def ", "}*]
   [Statement]
+  // Outputs: [{Output ", "}+]
 end]
 
   Main.Main = [// Defs: [{Def ", "}+]
-  [Statement]]
+  [Statement]
+  // Outputs: [{Output ", "}+]]
   
   ProcSeq.ProcSeq = [[Procedure]
 [ProcSeq]]

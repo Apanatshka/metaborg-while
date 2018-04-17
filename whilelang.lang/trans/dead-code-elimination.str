@@ -12,7 +12,8 @@ rules
 
 eliminate-dead-code = bottomup(try(dead-code-elimination))
 
-dead-code-elimination: this@Assign(Var(name), exp) -> Skip()
+dead-code-elimination: this@Assign(Var(n), exp) -> Skip()
 where a := <nabl2-get-ast-analysis> this
+    ; name := <nabl2-mk-occurrence(|"Var");nabl2-get-resolved-name(|a);Fst> n
     ; Set(live-vars) := <flowspec-get-property-post(|a, "live")> this
-    ; <not(getfirst(!(<id>,name);strip-annos;eq))> live-vars
+    ; <not(getfirst(!(<id>,name);eq))> live-vars

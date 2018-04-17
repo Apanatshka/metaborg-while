@@ -15,7 +15,7 @@ rules
 init ^ (scope) :=
   new scope.
 
-Def [[ n ^ (scope) ]] :=
+Def [[ Def(n) ^ (scope) ]] :=
   Var { n } <- scope,
   Var { n } : Int().
 
@@ -24,11 +24,12 @@ Def [[ n ^ (scope) ]] :=
   [[ main ^ (filescope) ]],
   new filescope.
 
-[[ Main(defs, s) ^ (filescope) ]] :=
+[[ Main(defs, s, outs) ^ (filescope) ]] :=
   Proc { Main() } <- filescope,
   Proc { Main() } ===> mainscope,
   mainscope ---> filescope,
   Map1(Def) [[ defs ^ (mainscope) ]],
+  Map1 [[ outs ^ (mainscope) ]],
   [[ s ^ (mainscope) ]],
   new mainscope.
 
@@ -38,15 +39,19 @@ Def [[ n ^ (scope) ]] :=
 
 [[ ProcSeqEnd() ^ (_) ]].
 
-[[ Procedure(name, ins, out, defs, body) ^ (filescope) ]] :=
+[[ Procedure(name, ins, out, defs, body, outs) ^ (filescope) ]] :=
   Proc { name } <- filescope,
   Proc { name } ===> procedurescope,
   procedurescope ---> filescope,
   Map1 [[ ins ^ (procedurescope) ]],
   [[ out ^ (procedurescope) ]],
   Map1(Def) [[ defs ^ (procedurescope) ]],
+  Map1 [[ outs ^ (mainscope) ]],
   [[ body ^ (procedurescope) ]],
   new procedurescope.
+
+[[ Output(n) ^ (scope) ]] :=
+  Var { n } -> scope.
 
 [[ Val(in) ^ (procedurescope) ]] :=
   Var { in } <- scope,
@@ -82,52 +87,88 @@ Def [[ n ^ (scope) ]] :=
 
 [[ Num(_) ^ (scope) ]].
 
-[[ Add(e1, e2) ^ (scope) ]] :=
+[[ here@BinOp(Add(), e1, e2) ^ (scope') ]] :=
+  scope ---> scope',
+  new scope,
+  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ Sub(e1, e2) ^ (scope) ]] :=
+[[ here@BinOp(Sub(), e1, e2) ^ (scope') ]] :=
+  scope ---> scope',
+  new scope,
+  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ Mul(e1, e2) ^ (scope) ]] :=
+[[ here@BinOp(Mul(), e1, e2) ^ (scope') ]] :=
+  scope ---> scope',
+  new scope,
+  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ Div(e1, e2) ^ (scope) ]] :=
+[[ here@BinOp(Div(), e1, e2) ^ (scope') ]] :=
+  scope ---> scope',
+  new scope,
+  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
 [[ True() ^ (scope) ]].
 [[ False() ^ (scope) ]].
 
-[[ Not(e) ^ (scope) ]] :=
+[[ here@UnOp(Not(), e) ^ (scope') ]] :=
+  scope ---> scope',
+  new scope,
+  refs is set R(scope),
   [[ e ^ (scope) ]].
 
-[[ And(e1, e2) ^ (scope) ]] :=
+[[ here@BinOp(And(), e1, e2) ^ (scope') ]] :=
+  scope ---> scope',
+  new scope,
+  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ Or(e1, e2) ^ (scope) ]] :=
+[[ here@BinOp(Or(), e1, e2) ^ (scope') ]] :=
+  scope ---> scope',
+  new scope,
+  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ Eq(e1, e2) ^ (scope) ]] :=
+[[ here@BinOp(Eq(), e1, e2) ^ (scope') ]] :=
+  scope ---> scope',
+  new scope,
+  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ Gt(e1, e2) ^ (scope) ]] :=
+[[ here@BinOp(Gt(), e1, e2) ^ (scope') ]] :=
+  scope ---> scope',
+  new scope,
+  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ Gte(e1, e2) ^ (scope) ]] :=
+[[ here@BinOp(Gte(), e1, e2) ^ (scope') ]] :=
+  scope ---> scope',
+  new scope,
+  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ Lt(e1, e2) ^ (scope) ]] :=
+[[ here@BinOp(Lt(), e1, e2) ^ (scope') ]] :=
+  scope ---> scope',
+  new scope,
+  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ Lte(e1, e2) ^ (scope) ]] :=
+[[ here@BinOp(Lte(), e1, e2) ^ (scope') ]] :=
+  scope ---> scope',
+  new scope,
+  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].

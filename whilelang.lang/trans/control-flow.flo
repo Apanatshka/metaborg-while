@@ -8,9 +8,15 @@ imports
 
 control-flow rules
 
-  root Procedure(_, _, _, _, s) = start -> s -> end
+  root Procedure(_, _, _, defs, s, outs) = start -> defs -> s -> outs -> end
 
-  root Main(_, s) = start -> s -> this -> end
+  root Main(defs, s, outs) = start -> defs -> s -> outs -> end
+
+  Cons(d@Def(_), t) = entry -> node d -> t -> exit
+
+  Cons(o@Output(_), t) = entry -> node o -> t -> exit
+
+  Nil() = entry -> exit
 
   Assign(_, rhs) =
     entry -> rhs -> this -> exit
@@ -28,31 +34,57 @@ control-flow rules
 
   node Ref(_)
   node Num(_)
-  Add(l,r) = entry -> l -> r -> this -> exit
-  Sub(l,r) = entry -> l -> r -> this -> exit
-  Mul(l,r) = entry -> l -> r -> this -> exit
-  Div(l,r) = entry -> l -> r -> this -> exit
+  BinOp(_,l,r) = entry -> l -> r -> this -> exit
   node True()
   node False()
-  Not(s) = entry -> s -> this -> exit
-  And(l,r) = entry -> l -> r -> this -> exit
-  Or(l,r) = entry -> l -> r -> this -> exit
-  Eq(l,r) = entry -> l -> r -> this -> exit
-  Gt(l,r) = entry -> l -> r -> this -> exit
-  Gte(l,r) = entry -> l -> r -> this -> exit
-  Lt(l,r) = entry -> l -> r -> this -> exit
-  Lte(l,r) = entry -> l -> r -> this -> exit
+  UnOp(_,s) = entry -> s -> this -> exit
 
 properties
 
   live: MaySet(term)
+  definition: MaySet(name * Option(index))
+  available: MustSet(term)
+  veryBusy: MustSet(term)
+  
+  external refs: List(name)
 
 property rules
 
-  live(Ref(n) -> next) = live(next) \/ {n}
+  live(Ref(n) -> next) = live(next) \/ { Var {n} }
 
-  live(Assign(Var(n), _) -> next) = live(next) \ {n}
-
-  live(Main(vars, _) -> next) = live(next) \/ Set.fromList(vars)
+  live(Assign(Var(n), _) -> next) = live(next) \ { Var {n} }
+  
+  // add all defs as live at the end of the program
+  live(Output(n) -> next) = live(next) \/ { Var {n} }
 
   live(_ -> next) = live(next)
+
+  definition(prev -> Def(n)) =
+    { (Var{n}, None()) } \/ definition(prev)
+
+  definition(prev -> a@Assign(Var(n), e)) =
+    { (Var{n}, Some(indexOf(a))) } \/
+    { (m, l) | (m, l) <- definition(prev), m != Var{n} }
+  
+  definition(prev -> _) = definition(prev)
+
+  // This rule doesn't work.. it seems to be a problem with the definition of refs in NaBL2
+  available(prev -> Assign(Var(n), _)) =
+    { expr |
+      expr <- available(prev),
+      !(Var{n} in Set.fromList(refs(expr))) }
+  
+  available(prev -> e@UnOp(_, _)) = available(prev) \/ { e }
+  available(prev -> e@BinOp(_, _, _)) = available(prev) \/ { e }
+  
+  available(prev -> _) = available(prev)
+
+  veryBusy(Assign(Var(n), _) -> next) =
+    { expr |
+      expr <- veryBusy(next),
+      !(Var{n} in Set.fromList(refs(expr))) }
+  
+  veryBusy(e@UnOp(_, _) -> next) = veryBusy(next) \/ { e }
+  veryBusy(e@BinOp(_, _, _) -> next) = veryBusy(next) \/ { e }
+  
+  veryBusy(_ -> next) = veryBusy(next)

@@ -9,10 +9,40 @@ libspoofax/stratego/debug
 
 strategies
 
-desugar: Root(proc*, main) -> DesugaredRoot(<foldr(!ProcSeqEnd(), \(h,t) -> ProcSeq(<desugar> h,t)\)> proc*, Main(def*, main))
+desugar: Root(proc*, main) -> DesugaredRoot(<foldr(!ProcSeqEnd(), \(h,t) -> ProcSeq(<desugar> h,t)\)> proc*, Main(def*, <bottomup(try(desugar-Expr))> main, output*))
 with def* := <find-names> main
+   ; output* := <map(\Def(n) -> Output(n)\)> def*
 
-desugar: Procedure(name, in*, out, body) -> Procedure(name, in*, out, def*, body)
+desugar: Procedure(name, in*, out, body) -> Procedure(name, in*, out, def*, <bottomup(try(desugar-Expr))> body, output*)
 with def* := <find-names> body
+   ; output* := <map(\Def(n) -> Output(n)\)> def*
 
-find-names = collect-all(?Ref(<id>) + ?Var(<id>));map(origin-strip)
+find-names = collect-all(?Ref(<id>) + ?Var(<id>));map(!Def(<origin-strip>))
+
+desugar-Expr: Add(l,r) -> BinOp(Add(), l, r)
+desugar-Expr: Sub(l,r) -> BinOp(Sub(), l, r)
+desugar-Expr: Mul(l,r) -> BinOp(Mul(), l, r)
+desugar-Expr: Div(l,r) -> BinOp(Div(), l, r)
+desugar-Expr: And(l,r) -> BinOp(And(), l, r)
+desugar-Expr: Or(l,r)  -> BinOp(Or(), l, r)
+desugar-Expr: Eq(l,r)  -> BinOp(Eq(), l, r)
+desugar-Expr: Gt(l,r)  -> BinOp(Gt(), l, r)
+desugar-Expr: Gte(l,r) -> BinOp(Gte(), l, r)
+desugar-Expr: Lt(l,r)  -> BinOp(Lt(), l, r)
+desugar-Expr: Lte(l,r) -> BinOp(Lte(), l, r)
+desugar-Expr: Not(e) -> UnOp(Not(), e)
+
+ensugar-Expr: BinOp(Add(), l, r) -> Add(l,r)
+ensugar-Expr: BinOp(Sub(), l, r) -> Sub(l,r)
+ensugar-Expr: BinOp(Mul(), l, r) -> Mul(l,r)
+ensugar-Expr: BinOp(Div(), l, r) -> Div(l,r)
+ensugar-Expr: BinOp(And(), l, r) -> And(l,r)
+ensugar-Expr: BinOp(Or(), l, r)  -> Or(l,r)
+ensugar-Expr: BinOp(Eq(), l, r)  -> Eq(l,r)
+ensugar-Expr: BinOp(Gt(), l, r)  -> Gt(l,r)
+ensugar-Expr: BinOp(Gte(), l, r) -> Gte(l,r)
+ensugar-Expr: BinOp(Lt(), l, r)  -> Lt(l,r)
+ensugar-Expr: BinOp(Lte(), l, r) -> Lte(l,r)
+ensugar-Expr: UnOp(Not(), e)     -> Not(e)
+
+ensugar = bottomup(try(ensugar-Expr))

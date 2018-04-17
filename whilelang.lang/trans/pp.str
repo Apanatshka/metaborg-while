@@ -8,6 +8,7 @@ imports
   pp/Whilelang-parenthesize
   pp/Whilelang-pp
   pp/desugared/-
+  desugar
 
 rules
 
@@ -20,19 +21,19 @@ rules
 
 rules
   
-  pp-Whilelang-string =
+  pp-Whilelang-string = ensugar;
     parenthesize-Whilelang
     ; prettyprint-Whilelang-start-symbols
     ; !V([], <id>)
     ; box2text-string(|120)
       
-  pp-partial-Whilelang-string =
+  pp-partial-Whilelang-string = ensugar;
     parenthesize-Whilelang
     ; prettyprint-Whilelang
     ; !V([], <id>)
     ; box2text-string(|120)
     
-  pp-partial-Whilelang-string(|sort) =
+  pp-partial-Whilelang-string(|sort) = ensugar;
     parenthesize-Whilelang
     ; prettyprint-Whilelang(|sort)
     ; !V([], <id>)
