@@ -1,0 +1,40 @@
+module uninitialized
+
+imports
+
+nabl2/api
+flowspec/api
+
+signatures/-
+
+rules
+
+warn-uninitialized(|a) =
+  collect-all(may-no-must-uninitialized(|a))
+; map(!(<id>, "Variable may be unitialized"))
+
+error-uninitialized(|a) =
+  collect-all(must-uninitialized(|a))
+; map(!(<id>, "Variable is not initialized"))
+
+may-uninitialized(|a): here@Ref(n) -> here
+where
+  ref := <nabl2-mk-occurrence(|"Var")> n
+; (decl, _) := <nabl2-get-resolved-name(|a)> ref
+; Set(l) := <flowspec-get-property-pre(|a, "definition")> here
+; <getfirst(?(decl, None()))> l
+
+may-no-must-uninitialized(|a): here@Ref(n) -> here
+where
+  ref := <nabl2-mk-occurrence(|"Var")> n
+; (decl, _) := <nabl2-get-resolved-name(|a)> ref
+; Set(l) := <flowspec-get-property-pre(|a, "definition")> here
+; <getfirst(?(decl, None()))> l
+; <getfirst(?(decl, Some(_)))> l
+
+must-uninitialized(|a): here@Ref(n) -> here
+where
+  ref := <nabl2-mk-occurrence(|"Var")> n
+; (decl, _) := <nabl2-get-resolved-name(|a)> ref
+; Set(l) := <flowspec-get-property-pre(|a, "definition")> here
+; <retain-all(?(decl, _));?[(decl, None())]> l

@@ -16,6 +16,7 @@ imports
   libspoofax/stratego/debug
   
   desugar
+  uninitialized
 
 rules // Analysis
 
@@ -24,6 +25,17 @@ rules // Analysis
 //  nabl2-debug-constraint-generation-hook = id
 
 //  nabl2-debug-analysis-hook = id
+
+  nabl2-custom-analysis-unit-hook:
+    (_, ast, _) -> ast
+    with nabl2-custom-analysis-info-msg(|"Custom unit analysis step")
+
+  nabl2-custom-analysis-final-hook(|a):
+    (_, _, asts) -> (errors, warnings, notes, ())
+    with <nabl2-custom-analysis-info(|"Custom final analysis step")> a
+       ; errors   := <error-uninitialized(|a)> asts
+       ; warnings := <warn-uninitialized(|a)> asts
+       ; notes    := []
 
 rules // Editor services
 
