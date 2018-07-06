@@ -19,7 +19,6 @@ pardonedLanguages:
 - SDF
 language:
   sdf:
-    # If set to java, set the table in editor/Syntax.esv to target/metaborg/sdf-new.tbl
     sdf2table: java
   nabl2:
     debug: all
@@ -40,5 +39,3 @@ language:
     - stratego-sdf
     - -la
     - strc
-#build:
-#  useBuildSystemSpec: true

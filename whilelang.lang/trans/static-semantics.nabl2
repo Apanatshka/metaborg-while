@@ -20,6 +20,7 @@ Def [[ Def(n) ^ (scope) ]] :=
   Var { n } : Int().
 
 [[ DesugaredRoot(procs, main) ^ (globalscope) ]] :=
+  filescope ---> globalscope,
   [[ procs ^ (filescope) ]],
   [[ main ^ (filescope) ]],
   new filescope.
@@ -87,88 +88,88 @@ Def [[ Def(n) ^ (scope) ]] :=
 
 [[ Num(_) ^ (scope) ]].
 
-[[ here@BinOp(Add(), e1, e2) ^ (scope') ]] :=
-  scope ---> scope',
-  new scope,
-  refs is set R(scope),
+[[ here@BinOp(Add(), e1, e2) ^ (scope) ]] :=
+//  scope ---> scope,
+//  new scope,
+//  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ here@BinOp(Sub(), e1, e2) ^ (scope') ]] :=
-  scope ---> scope',
-  new scope,
-  refs is set R(scope),
+[[ here@BinOp(Sub(), e1, e2) ^ (scope) ]] :=
+//  scope ---> scope,
+//  new scope,
+//  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ here@BinOp(Mul(), e1, e2) ^ (scope') ]] :=
-  scope ---> scope',
-  new scope,
-  refs is set R(scope),
+[[ here@BinOp(Mul(), e1, e2) ^ (scope) ]] :=
+//  scope ---> scope,
+//  new scope,
+//  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ here@BinOp(Div(), e1, e2) ^ (scope') ]] :=
-  scope ---> scope',
-  new scope,
-  refs is set R(scope),
+[[ here@BinOp(Div(), e1, e2) ^ (scope) ]] :=
+//  scope ---> scope,
+//  new scope,
+//  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
 [[ True() ^ (scope) ]].
 [[ False() ^ (scope) ]].
 
-[[ here@UnOp(Not(), e) ^ (scope') ]] :=
-  scope ---> scope',
-  new scope,
-  refs is set R(scope),
+[[ here@UnOp(Not(), e) ^ (scope) ]] :=
+//  scope ---> scope,
+//  new scope,
+//  refs is set R(scope),
   [[ e ^ (scope) ]].
 
-[[ here@BinOp(And(), e1, e2) ^ (scope') ]] :=
-  scope ---> scope',
-  new scope,
-  refs is set R(scope),
+[[ here@BinOp(And(), e1, e2) ^ (scope) ]] :=
+//  scope ---> scope,
+//  new scope,
+//  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ here@BinOp(Or(), e1, e2) ^ (scope') ]] :=
-  scope ---> scope',
-  new scope,
-  refs is set R(scope),
+[[ here@BinOp(Or(), e1, e2) ^ (scope) ]] :=
+//  scope ---> scope,
+//  new scope,
+//  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ here@BinOp(Eq(), e1, e2) ^ (scope') ]] :=
-  scope ---> scope',
-  new scope,
-  refs is set R(scope),
+[[ here@BinOp(Eq(), e1, e2) ^ (scope) ]] :=
+//  scope ---> scope,
+//  new scope,
+//  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ here@BinOp(Gt(), e1, e2) ^ (scope') ]] :=
-  scope ---> scope',
-  new scope,
-  refs is set R(scope),
+[[ here@BinOp(Gt(), e1, e2) ^ (scope) ]] :=
+//  scope ---> scope,
+//  new scope,
+//  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ here@BinOp(Gte(), e1, e2) ^ (scope') ]] :=
-  scope ---> scope',
-  new scope,
-  refs is set R(scope),
+[[ here@BinOp(Gte(), e1, e2) ^ (scope) ]] :=
+//  scope ---> scope,
+//  new scope,
+//  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ here@BinOp(Lt(), e1, e2) ^ (scope') ]] :=
-  scope ---> scope',
-  new scope,
-  refs is set R(scope),
+[[ here@BinOp(Lt(), e1, e2) ^ (scope) ]] :=
+//  scope ---> scope,
+//  new scope,
+//  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
 
-[[ here@BinOp(Lte(), e1, e2) ^ (scope') ]] :=
-  scope ---> scope',
-  new scope,
-  refs is set R(scope),
+[[ here@BinOp(Lte(), e1, e2) ^ (scope) ]] :=
+//  scope ---> scope,
+//  new scope,
+//  refs is set R(scope),
   [[ e1 ^ (scope) ]],
   [[ e2 ^ (scope) ]].
